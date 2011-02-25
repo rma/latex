@@ -1,0 +1,192 @@
+% ********************************************************************
+% beamerthemergm.sty
+% Rob Moss, 2011
+%
+% This package provides the "rgm" theme for Beamer.
+%
+% Page numbering and "extra slides" tricks were taken from:
+% http://www.stanford.edu/~dgleich/notebook/2009/05/
+% appendix_slides_in_beamer_cont_1.html
+%
+% The chalkboard-style slides were inspired by Jason Dagit's presentation:
+% http://www.mail-archive.com/darcs-users@darcs.net/msg11066.html
+%
+% A custom font can be used for the chalkboard-style slides by setting
+% \rgmbeamerchalkfont to the name of the desired font. The background
+% image is defined by \rgmbeamerchalkbg and must exist.
+%
+% By default, the colour theme "zenburn" is used.
+%
+% 1.0 2011/02/06
+%   Initial version of the theme.
+%
+% ********************************************************************
+
+\NeedsTeXFormat{LaTeX2e}
+\def \filename {beamerthemergm.sty}
+\def \filedate {2011/02/06}
+\def \fileversion {1.0}
+\ProvidesPackage{beamerthemergm}[\filedate\space\fileversion\space
+    Beamer "rgm" theme]
+\typeout{Package: `beamerthemergm' \fileversion\space <\filedate>}
+
+% ********************************************************************
+% Temporary colour changes
+% ********************************************************************
+
+\newcommand{\rgmbeamerhideinfolines}{
+  \setbeamercolor*{palette primary}{fg=background,bg=background}
+  \setbeamercolor*{palette secondary}{fg=background,bg=background}
+  \setbeamercolor*{palette tertiary}{fg=background,bg=background}
+}
+
+% NOTE: This command should be over-ridden by the colour theme.
+\newcommand{\rgmbeamershowinfolines}{
+  \setbeamercolor*{palette primary}{fg=parent,bg=background}
+  \setbeamercolor*{palette secondary}{fg=parent,bg=background}
+  \setbeamercolor*{palette tertiary}{fg=parent,bg=background}
+}
+
+\newcommand{\rgmbeamertransinfolines}{
+  \setbeamercolor{palette primary}{bg=}
+  \setbeamercolor{palette secondary}{bg=}
+  \setbeamercolor{palette tertiary}{bg=}
+}
+
+\newcommand{\rgmbeamersolidinfolines}{
+  \setbeamercolor{palette primary}{bg=background}
+  \setbeamercolor{palette secondary}{bg=background}
+  \setbeamercolor{palette tertiary}{bg=background}
+}
+
+\newcommand{\rgmbeamerhidesections}{
+  \setbeamercolor*{section in head/foot}{fg=background,bg=background}
+  \setbeamercolor*{subsection in head/foot}{fg=background,bg=background}
+}
+
+\newcommand{\rgmbeamershowsections}{
+  \setbeamercolor*{section in head/foot}{parent=palette tertiary}
+  \setbeamercolor*{subsection in head/foot}{parent=palette primary}
+}
+
+\newcommand{\rgmbeamerchalkmodeon}{
+  \setbeamercolor{frametitle}{fg=white,bg=}
+  \setbeamercolor{normal text}{fg=white}
+}
+
+% NOTE: This command should be over-ridden by the colour theme.
+\newcommand{\rgmbeamerchalkmodeoff}{
+  \setbeamercolor*{frametitle}{}
+  \setbeamercolor*{normal text}{}
+  \setbeamercolor{normal text}{fg=normtext,bg=background}
+  \setbeamercolor{frametitle}{fg=,bg=background}
+}
+
+% ********************************************************************
+% Underlying themes
+% ********************************************************************
+
+% The infolines theme displays the section and sub-section in the header, and
+% the author, institution, talk title, date and slide number in the footer.
+\useoutertheme{infolines}
+\usecolortheme{zenburn}
+
+% ********************************************************************
+% Customisations
+% ********************************************************************
+
+% Rounded corners on blocks, but no shadows.
+\setbeamertemplate{blocks}[rounded][shadow=false]
+
+% Hide the bar of navigation symbols.
+\setbeamertemplate{navigation symbols}{}
+
+% NOTE: Section outlines only make sense if there are no sub-sections.
+%       Since the only such section in this talk is the introduction, which
+%       immediately follows the whole-talk outline, there is no need for a
+%       single section outline in this presentation. The commented-out code
+%       below produces section outlines, for when they are of use.
+\AtBeginSection[]{}
+%  \begin{frame}<beamer>
+%    \frametitle{Section Outline}
+%    \tableofcontents[currentsection]
+%  \end{frame}
+%}
+
+% NOTE: Unlike section outlines, sub-section outlines are generally useful.
+%       They are redundant if the sub-section contains very few slides, but
+%       in that case, why is the sub-section even defined?
+\AtBeginSubsection[]{
+  \addtocounter{framenumber}{-1}
+  \rgmbeamerhideinfolines
+  \begin{frame}<beamer>%[plain]
+    \frametitle{Talk Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+  \rgmbeamershowinfolines
+}
+
+% ********************************************************************
+% Chalkboard-style slides
+% ********************************************************************
+
+% By default, don't use a special font for the chalkboard slides.
+\providecommand{\rgmbeamerchalkfont}{}
+
+% The default background image for the chalkboard slides.
+\providecommand{\rgmbeamerchalkbg}{blackboard}
+
+% Chalkboard template, as inspired by Jason Dagit's thesis presentation.
+% A handwritten font (such as "Angelina") is the most suitable choice.
+\newcommand{\chalkframe}[2]{
+  \setbeamertemplate{background canvas}{
+    \includegraphics[height=\paperheight]{\rgmbeamerchalkbg}
+  }
+  \rgmbeamerchalkmodeon
+  \rgmbeamertransinfolines
+
+  \begin{frame}{\rgmbeamerchalkfont #1}
+    \rgmbeamerchalkfont #2
+  \end{frame}
+
+  \rgmbeamersolidinfolines
+  \rgmbeamerchalkmodeoff
+  \setbeamertemplate{background canvas}[default]
+}
+
+% ********************************************************************
+% Structural commands
+% ********************************************************************
+
+% Hide the infolines on the title slide(s).
+\newcommand{\rgmbeamerprecontent}{
+  \rgmbeamerhideinfolines
+}
+
+% Show the infolines on the remaining slides.
+\newcommand{\rgmbeamercontent}{
+  \rgmbeamershowinfolines
+  \setcounter{framenumber}{0}
+}
+
+% Mark the beginning of extra slides, after the last "official" slide.
+\newcommand{\rgmbeamerextraslides}{
+  % Hide the section and sub-section headers for the extra slides.
+  \rgmbeamerhidesections
+
+  % Store the number of frames that have been produced so far.
+  \newcounter{finalframe}
+  \setcounter{finalframe}{\value{framenumber}}
+
+  % After the final numbered slide, perhaps use \appendix{}?
+  %
+  % NOTE: using \appendix produces the following warning:
+  %   Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+  %   (hyperref)                removing `\translate ' on input line 163.
+}
+
+% Mark the end of the extra slides (and thus, the presentation).
+\newcommand{\rgmbeamerendcontent}{
+  % Restore the last frame number.
+  \setcounter{framenumber}{\value{finalframe}}
+}

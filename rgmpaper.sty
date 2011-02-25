@@ -1,0 +1,250 @@
+% ********************************************************************
+% rgmpaper.sty
+% Rob Moss, 2011
+%
+% This package provides a template for writing papers.
+%
+% 1.0 2011/02/06
+%   Initial version of the package, supporting pdflatex and xelatex.
+%
+% Drafting Options:
+%   draft - use line numbering and double-spacing (default)
+%   final - produce the final, print-ready version (option)
+%
+% Font Options:
+%   euler   - use the Euler math fonts (default)
+%   noeuler - don't use the Euler math fonts (option)
+%
+% Citation Options:
+%   square   - use square parentheses (default)
+%   round    - use round parentheses (option)
+%   numeric  - use numerical citations (default)
+%   authyear - use author-year citations (option)
+%   bycite   - order bibliography by citation order (default)
+%   byauthor - order bibliography by author surname (option)
+%
+%   num      - equivalent to [square,numeric,bycite] (default)
+%   auth     - equivalent to [round,authyear,byauthor] (option)
+%
+% ********************************************************************
+
+\NeedsTeXFormat{LaTeX2e}
+\def \filename {rgmpaper.sty}
+\def \filedate {2011/02/06}
+\def \fileversion {1.0}
+\ProvidesPackage{rgmpaper}[\filedate\space\fileversion\space
+  Template for writing papers]
+\typeout{Package: `rgmpaper' \fileversion\space <\filedate>}
+
+% ********************************************************************
+% Package options
+% ********************************************************************
+
+\RequirePackage{ifthen} % used for package options and xetex/pdftex drivers
+
+\newboolean{draft} % print version information on pages
+\setboolean{draft}{true} % default to draft mode
+\DeclareOption{draft}{\setboolean{draft}{true}}
+\DeclareOption{final}{\setboolean{draft}{false}}
+
+\newboolean{euler} % use the Euler math fonts
+\setboolean{euler}{true} % default to using the Euler math fonts
+\DeclareOption{euler}{\setboolean{euler}{true}}
+\DeclareOption{noeuler}{\setboolean{euler}{false}}
+
+\newboolean{byauthor} % sort citations by author surname
+\DeclareOption{byauthor}{\setboolean{byauthor}{true}}
+\DeclareOption{bycite}{\setboolean{byauthor}{false}}
+
+\newboolean{round} % use round brackets for citations
+\DeclareOption{round}{\setboolean{round}{true}}
+\DeclareOption{square}{\setboolean{round}{false}}
+
+\newboolean{authyear} % cite by author surname and year
+\DeclareOption{authyear}{\setboolean{authyear}{true}}
+\DeclareOption{numeric}{\setboolean{authyear}{false}}
+
+\DeclareOption{auth}{%
+    \setboolean{byauthor}{true}
+    \setboolean{round}{true}
+    \setboolean{authyear}{true}
+}
+\DeclareOption{num}{%
+    \setboolean{byauthor}{false}
+    \setboolean{round}{false}
+    \setboolean{authyear}{false}
+}
+
+\ProcessOptions\relax
+
+% ********************************************************************
+% Check for xetex
+% ********************************************************************
+
+\IfFileExists{ifxetex.sty}{%
+  \RequirePackage{ifxetex}
+}{%
+  \newboolean{xetex}
+  \setboolean{xetex}{false}
+}
+
+% ********************************************************************
+% Required packages
+% ********************************************************************
+
+\RequirePackage{varioref} % improved references, must be before hyperref
+\ifthenelse{ \boolean{xetex} }{%
+  \RequirePackage[xetex,hyperfootnotes=false,pdfpagelabels]{hyperref}
+  \RequirePackage[xetex]{graphicx}
+}{%
+  \RequirePackage[pdftex,hyperfootnotes=false,pdfpagelabels]{hyperref}
+  \RequirePackage[pdftex]{graphicx}
+}
+\RequirePackage[british]{babel} % use British English, not US English
+\RequirePackage{nicefrac} % vulgar fractions
+\RequirePackage{framed} % framed or shaded regions that can break across pages
+\RequirePackage{marginnote} % notes in the margin, even where \marginpar fails
+\RequirePackage{afterpage} % control float placement
+\RequirePackage[margin=2mm]{subfig} % sub-figures
+\RequirePackage{tabularx} % better tables
+\RequirePackage{booktabs} % for better rules in tables
+\RequirePackage{multirow} % cells that span multiple rows
+\RequirePackage{xspace} % to get the spacing after macros right
+\RequirePackage[fleqn]{amsmath} % math environments and more by the AMS
+\RequirePackage{amsthm,amssymb} % more math-related AMS packages
+\RequirePackage{array} % for nicely-aligned sets of equations
+\RequirePackage[smaller]{acronym} % nice macros for handling acronyms
+\RequirePackage{listings} % typesetting of code listings
+\RequirePackage{verbatim} % the comment environment provides block comments
+\RequirePackage{fixltx2e} % fixes some LaTeX stuff
+\RequirePackage{mparhack} % get marginpar right
+\RequirePackage{scrtime} % time access for draft option
+\RequirePackage[dvipsnames]{xcolor} % [dvipsnames]
+\RequirePackage{url} % handle URLs nicely
+
+% ********************************************************************
+% Drafting option
+% ********************************************************************
+
+\newcommand{\finalVersionString}{}
+\ifthenelse{\boolean{draft}}{%
+    \RequirePackage{lineno}
+    \linenumbers
+    \RequirePackage{setspace}
+    \doublespacing
+    \RequirePackage[draft]{prelim2e}
+        \renewcommand{\PrelimWords}{\relax}
+        \renewcommand{\PrelimText}{\footnotesize[\,\today\ at \thistime\,]}
+}{\renewcommand{\finalVersionString}{\emph{Final Version} as of \today\ at \thistime.}}
+
+% ********************************************************************
+% Citation and bibliography styles
+% ********************************************************************
+
+\ifthenelse{\boolean{round}}{%
+    \ifthenelse{\boolean{authyear}}{%
+        \RequirePackage[round,authoryear,sort&compress]{natbib}
+    }{\RequirePackage[round,numbers,sort&compress]{natbib}}
+}{%
+    \ifthenelse{\boolean{authyear}}{%
+        \RequirePackage[square,authoryear,sort&compress]{natbib}
+    }{\RequirePackage[square,numbers,sort&compress]{natbib}}
+}
+
+% select the specific bibliography style
+\ifthenelse{\boolean{byauthor}}{%
+    \bibliographystyle{plainrgm}
+}{%
+    \bibliographystyle{plainrgmc}
+}
+
+\ifthenelse{\boolean{authyear}}{%
+    \renewcommand{\cite}{\citep}
+}{}
+
+% ********************************************************************
+% Custom commands
+% ********************************************************************
+
+% Common abbreviations
+\newcommand\eg{e.\,g.\ }
+\newcommand\ie{i.\,e.\ }
+\newcommand\cf{cf.\ }
+
+% Mark "to-do" notes in bold.
+\newcommand\todo[1]{\textbf{[TODO: }#1\textbf{]}}
+
+% Shorthand for vector notation.
+\newcommand\vct[1]{\overrightarrow{#1}}
+
+% Correct \autoref (provided by hyperref) to handle sub-figures.
+\newcommand{\subfigureautorefname}{\figureautorefname}
+
+% Graffiti as in GKP's book "Concrete Mathematics"
+\DeclareRobustCommand{\note}[1]{\marginpar{%
+    \slshape\footnotesize%\small%
+    \parindent=0pt\lineskip=0pt\lineskiplimit=0pt%\baselineskip=10pt
+    \tolerance=2000\hyphenpenalty=300\exhyphenpenalty=300%
+    \doublehyphendemerits=100000\finalhyphendemerits=\doublehyphendemerits%
+    \raggedright\hspace{0pt}#1}}
+
+% ********************************************************************
+% Fonts
+% ********************************************************************
+
+\ifthenelse{ \boolean{euler} }{%
+    \RequirePackage[euler-digits]{eulervm} % use the Euler math fonts
+}{}
+
+\ifthenelse{ \boolean{xetex} }{%
+  \typeout {rgmpaper: xetex}
+  \RequirePackage{xunicode}
+  \RequirePackage[cm-default]{fontspec}
+  \RequirePackage{xltxtra}
+  \defaultfontfeatures{Scale=MatchLowercase,Mapping=tex-text}
+  \setmainfont[Scale=0.94]{DejaVu Serif}
+  \setmainfont[]{DejaVu Serif}
+  \setmonofont[]{DejaVu Sans Mono}
+  \setsansfont[]{DejaVu Sans}
+  % fake small caps
+  \usepackage{textcase}
+  \newcommand{\fakesc}[1]{{\footnotesize \MakeTextUppercase{#1}}}
+  \DeclareFontFamily{\encodingdefault}{\scdefault}{}
+  \DeclareFontShape{\encodingdefault}{\scdefault}{m}{sc}{<-> ptmrc8t}{}
+  \renewcommand{\textsc}[1]{%
+    {\usefont{\encodingdefault}{\scdefault}{m}{sc} #1}
+  }
+}{%
+  \typeout {rgmpaper: pdflatex}
+  \RequirePackage[T1]{fontenc}
+  \RequirePackage{textcomp}
+  % use Bera fonts
+  \RequirePackage[scaled]{beraserif}
+  \RequirePackage[scaled]{berasans}
+  \RequirePackage[scaled=0.8]{beramono}
+  % but use Times for small caps
+  \DeclareFontShape{T1}{fve}{m}{sc}{<-> ptmrc8t}{}
+  \usepackage{textcase}
+  \newcommand{\fakesc}[1]{{\footnotesize \MakeTextUppercase{#1}}}
+}
+
+% ********************************************************************
+% Listing settings
+% ********************************************************************
+
+\lstset{language=[LaTeX]Tex,%C++,
+    keywordstyle=\color{RoyalBlue},%\bfseries,
+    basicstyle=\small\ttfamily,
+    %identifierstyle=\color{NavyBlue},
+    commentstyle=\color{Green}\ttfamily,
+    stringstyle=\rmfamily,
+    numbers=none,%left,%
+    numberstyle=\scriptsize,%\tiny
+    stepnumber=5,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frameround=ftff,
+    frame=single
+    %frame=L
+}

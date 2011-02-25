@@ -1,0 +1,91 @@
+% ********************************************************************
+% rgmbeamer.sty
+% Rob Moss, 2011
+%
+% This package provides a template for writing beamer presentations.
+%
+% 1.0 2011/02/06
+%   Initial version of package, requires xelatex.
+%
+% Font Options:
+%   plainsans  - use a plain font for sans-serif text (default)
+%   handsans   - use a hand-written font for sans-serif text (option)
+%   plainserif - use a plain font for serif text (default)
+%   handserif  - use a hand-written font for serif text (option)
+%   plainchalk - use a plain font for chalkboard slides (default)
+%   handchalk  - use a hand-written font for chalkboard slides (default)
+%
+% ********************************************************************
+
+\NeedsTeXFormat{LaTeX2e}
+\def \filename {rgmbeamer.sty}
+\def \filedate {2011/02/06}
+\def \fileversion {1.0}
+\ProvidesPackage{rgmbeamer}[\filedate\space\fileversion\space
+  Template for writing beamer presentations]
+\typeout{Package: `rgmbeamer' \fileversion\space <\filedate>}
+
+% ********************************************************************
+% Package options
+% ********************************************************************
+
+\RequirePackage{ifthen} % used for package options
+
+% whether to use a plain font or a handwritten font for sans-serif
+\newboolean{handsans}
+\DeclareOption{plainsans}{\setboolean{handsans}{false}}
+\DeclareOption{handsans}{\setboolean{handsans}{true}}
+
+% whether to use a plain font or a handwritten font for serif
+\newboolean{handserif}
+\DeclareOption{plainserif}{\setboolean{handserif}{false}}
+\DeclareOption{handserif}{\setboolean{handserif}{true}}
+
+% whether to use a plain font or a handwritten font for chalk
+\newboolean{handchalk}
+\DeclareOption{plainchalk}{\setboolean{handchalk}{false}}
+\DeclareOption{handchalk}{\setboolean{handchalk}{true}}
+
+\ProcessOptions\relax
+
+% ********************************************************************
+% Required packages
+% ********************************************************************
+
+\RequirePackage{graphicx} % supports named arguments for \includegraphics
+\RequirePackage{fontspec} % provides an automatic interface for loading fonts
+\RequirePackage{upquote} % use the correct apostrophe in verbatim environments
+\defaultfontfeatures{Mapping=tex-text} % map '--' to emdash, etc
+\RequirePackage{xunicode} % support for LaTeX names for Unicode characters
+\RequirePackage{xltxtra} % other improvements, may affect sub/superscripts
+\RequirePackage{mathpazo} % makes beamer use the math font for digits
+
+% ********************************************************************
+% Font settings
+% ********************************************************************
+
+% the default hand-written font, can be over-ridden by the user
+\providecommand{\rgmbeamerhandfont}{Jrhand}
+
+\ifthenelse{\boolean{handsans}}{%
+    \setsansfont{\rgmbeamerhandfont}
+}{%
+}
+
+\ifthenelse{\boolean{handserif}}{%
+    \setmainfont{\rgmbeamerhandfont}
+}{%
+}
+
+\ifthenelse{\boolean{handchalk}}{%
+    \newcommand{\rgmbeamerchalkfont}{\fontspec{\rgmbeamerhandfont}}
+}{%
+    \newcommand{\rgmbeamerchalkfont}{}
+}
+
+% ********************************************************************
+% Default theme
+% ********************************************************************
+
+\usetheme{rgm}
+

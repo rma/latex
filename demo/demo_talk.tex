@@ -1,0 +1,110 @@
+\documentclass[17pt,serif,mathsans]{beamer}
+
+\usepackage[handchalk]{rgmbeamer}
+
+\setmainfont{DejaVu Serif}
+\setsansfont{DejaVu Sans}
+\setmonofont{DejaVu Sans Mono}
+
+\author{My Name}
+\institute{Some Place}
+\title{Some Presentation}
+
+\begin{document}
+
+% Pre-content slides have no headers or footers.
+\rgmbeamerprecontent
+
+\begin{frame}[plain]
+  \maketitle
+\end{frame}
+
+\begin{frame}{Talk Outline}
+  \tableofcontents
+\end{frame}
+
+% Content slides have headers and footers.
+\rgmbeamercontent
+
+% Use a shorter string for the institute in the frame footers.
+\institute{S.P.}
+
+\section{Introduction}
+
+\begin{frame}{Welcome}
+  \begin{center}
+  Welcome to the first slide.
+
+  \begin{itemize}
+    \item Point 1
+    \item Point 2
+    \item Point 3
+  \end{itemize}
+  \end{center}
+\end{frame}
+
+\section{Methods}
+
+\begin{frame}{Methods}
+  \begin{center}
+  \only<1>{
+    \begin{block}{First option}
+      $y = x^2$
+    \end{block}}
+  \only<2>{
+    \begin{alertblock}{Second option}
+      $y = x$
+    \end{alertblock}}
+  \only<3>{
+    \begin{exampleblock}{Third option}
+      $y = -x$
+    \end{exampleblock}}
+  \end{center}
+\end{frame}
+
+\section{Results}
+
+\chalkframe{Experiments}{
+  \begin{center}
+    \includegraphics[height=0.8\textheight]{experiments}
+  \end{center}
+}
+
+\begin{frame}{Answer}
+  \begin{center}
+    \begin{block}{The Correct Formula}
+      $y = 1-x^2$
+    \end{block}
+  \end{center}
+\end{frame}
+
+% Hide the section and sub-section headers for the final slide.
+\rgmbeamerhidesections
+
+\begin{frame}{The end \texorpdfstring{\ldots}{...}}
+  \begin{center}
+  Questions?
+
+  \vskip 1.25em
+  \texttt{my$@$email.com}
+  \end{center}
+\end{frame}
+
+% Begin the extra slides (ie, those after the official end of the talk).
+\rgmbeamerextraslides
+
+\begin{frame}{Extra Slide}
+  \begin{center}
+  What about \ldots
+
+  \begin{exampleblock}{Even Better?}
+    $y = -x^3$?
+  \end{exampleblock}
+  \end{center}
+\end{frame}
+
+% Mark the end of the slides.
+\rgmbeamerendcontent
+
+\end{document}
+
