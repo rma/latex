@@ -22,6 +22,7 @@
 %   authyear - use author-year citations (option)
 %   bycite   - order bibliography by citation order (default)
 %   byauthor - order bibliography by author surname (option)
+%   nobstyle - don't select a bibliography style (option)
 %
 %   num      - equivalent to [square,numeric,bycite] (default)
 %   auth     - equivalent to [round,authyear,byauthor] (option)
@@ -74,6 +75,9 @@
     \setboolean{round}{false}
     \setboolean{authyear}{false}
 }
+
+\newboolean{nobstyle} % don't choose a \bibliographystyle
+\DeclareOption{nobstyle}{\setboolean{nobstyle}{true}}
 
 \ProcessOptions\relax
 
@@ -152,10 +156,13 @@
 }
 
 % select the specific bibliography style
-\ifthenelse{\boolean{byauthor}}{%
-    \bibliographystyle{plainrgm}
+\ifthenelse{\boolean{nobstyle}}{%
 }{%
-    \bibliographystyle{plainrgmc}
+    \ifthenelse{\boolean{byauthor}}{%
+        \bibliographystyle{plainrgm}
+    }{%
+        \bibliographystyle{plainrgmc}
+    }
 }
 
 \ifthenelse{\boolean{authyear}}{%
