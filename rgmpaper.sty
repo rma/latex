@@ -195,6 +195,17 @@
     \doublehyphendemerits=100000\finalhyphendemerits=\doublehyphendemerits%
     \raggedright\hspace{0pt}#1}}
 
+% Fractions with units on the right-hand side
+%
+% Courtesy of: http://perkee.tumblr.com/post/117808875/
+%              unit-multiplication-in-latex-when-im
+\newcommand{\ufrac}[4]{%
+  \frac{%
+    \hfill#1\quad\hfill\mathrm{#2}
+  }{%
+    \hfill#3\hfill\quad\mathrm{#4}
+  }}
+
 % ********************************************************************
 % Fonts
 % ********************************************************************
