@@ -9,13 +9,15 @@ Description
 This collection consists of:
 
 * `rgmpaper.sty`: a template for writing papers.
+* `ajp-renal.bst`: a bibliography style compatible with AJP Renal.
 * `plainrgm.bst`: a bibliography style, sorted by author surname.
 * `plainrgmc.bst`: a bibliography style, sorted by citation order.
 * `rgmbeamer.sty`: a template for writing beamer presentations.
 * `beamerthemergm.sty`: a theme for beamer presentations.
 * `beamercolorthemezenburn.sty`: a colour theme for beamer presentations.
 
-The two bibliography styles are minor modifications to `plainnat.bst` that:
+The `plainrgm` bibliography styles are minor modifications to `plainnat.bst`
+that:
 
 * turn DOIs into clickable links to `http://dx.doi.org/`.
 * only include the URL field if there is no DOI.
