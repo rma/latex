@@ -4,7 +4,7 @@
 %%
 %% The original source files were:
 %%
-%% merlin.mbs  (with options: `ay,nat,nm-rvx,ed-rev,jnrlst,nmft,nmft-bf,keyxyr,note-yr,jxper,vnum-x,volp-sp,num-xser,jnm-x,add-pub,pre-pub,doi,edby,in-col,pp,xedn,jabr,xand,nfss,')
+%% merlin.mbs  (with options: `ay,nat,vonx,nm-rvx,ed-rev,jnrlst,nmft,nmft-bf,keyxyr,note-yr,jxper,vnum-x,volp-sp,num-xser,jnm-x,add-pub,pre-pub,doi,edby,in-col,pp,xedn,jabr,xand,nfss,')
 %% ----------------------------------------
 %% *** American Journal of Physiology ***
 %% 
@@ -1301,7 +1301,7 @@ FUNCTION {sort.format.names}
   numnames 'namesleft :=
     { namesleft #0 > }
     { s nameptr
-      "{vv{ } }{ll{ }}{  f{ }}{  jj{ }}"
+      "{ll{ }}{  f{ }}{  jj{ }}"
       format.name$ 't :=
       nameptr #1 >
         {

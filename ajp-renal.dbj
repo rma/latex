@@ -84,8 +84,8 @@ End of customized bst file
 % seq-no,%: Citation order
 %--------------------
 %ORDER ON VON PART (if not citation order)
-    %: (def) Sort on von part
-% vonx,%: Sort without von part
+%   %: (def) Sort on von part
+  vonx,%: Sort without von part
 %--------------------
 %IGNORE FIRST NAMES (if author-year citations)
     %: (def) Respect first names

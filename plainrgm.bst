@@ -1194,6 +1194,17 @@ FUNCTION {calc.label}
   'label :=
 }
 
+%
+% Changed the string:
+%     "{vv{ } }{ll{ }}{  f{ }}{  jj{ }}"
+% to:
+%     "{ll{ }}{  f{ }}{  jj{ }}"
+% in order to correctly sort surnames such as
+% de Rouffignac, van der Lubbe, van der Mark.
+%
+% As per the following solution:
+% http://tex.stackexchange.com/a/108466
+%
 FUNCTION {sort.format.names}
 { 's :=
   #1 'nameptr :=
@@ -1202,7 +1213,7 @@ FUNCTION {sort.format.names}
   numnames 'namesleft :=
     { namesleft #0 > }
     {
-      s nameptr "{vv{ } }{ll{ }}{  ff{ }}{  jj{ }}" format.name$ 't :=
+      s nameptr "{ll{ }}{  ff{ }}{  jj{ }}" format.name$ 't :=
       nameptr #1 >
         {
           "   "  *
